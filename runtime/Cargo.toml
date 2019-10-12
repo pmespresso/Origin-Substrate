@@ -123,9 +123,10 @@ package = 'substrate-wasm-builder-runner'
 version = '1.0.2'
 
 [package]
-authors = ['Anonymous']
+authors = ['YJ']
+build = 'build.rs'
 edition = '2018'
-name = 'node-template-runtime'
+name = 'origin-substrate-runtime'
 version = '2.0.0'
 
 [features]

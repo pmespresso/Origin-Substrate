@@ -1,4 +1,4 @@
-//! The Substrate Node Template runtime. This can be compiled with `#[no_std]`, ready for Wasm.
+//! The Substrate Node Origin Marketplace runtime. This can be compiled with `#[no_std]`, ready for Wasm.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
@@ -61,8 +61,8 @@ pub type Hash = primitives::H256;
 /// Digest item type.
 pub type DigestItem = generic::DigestItem<Hash>;
 
-/// Used for the module template in `./template.rs`
-mod template;
+/// Used for the marketplace module in `./marketplace.rs`
+mod marketplace;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -94,8 +94,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("node-template"),
-	impl_name: create_runtime_str!("node-template"),
+	spec_name: create_runtime_str!("origin-substrate-runtime"),
+	impl_name: create_runtime_str!("origin-substrate-runtime"),
 	authoring_version: 3,
 	spec_version: 4,
 	impl_version: 4,
@@ -252,8 +252,8 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
-/// Used for the module template in `./template.rs`
-impl template::Trait for Runtime {
+/// Used for the module marketplace in `./marketplace.rs`
+impl marketplace::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -270,8 +270,8 @@ construct_runtime!(
 		Indices: indices::{default, Config<T>},
 		Balances: balances::{default, Error},
 		Sudo: sudo,
-		// Used for the module template in `./template.rs`
-		TemplateModule: template::{Module, Call, Storage, Event<T>},
+		// Used for the module marketplace in `./marketplace.rs`
+		MarketplaceModule: marketplace::{Module, Call, Storage, Event<T>},
 	}
 );
 

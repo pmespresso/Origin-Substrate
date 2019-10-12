@@ -15,9 +15,9 @@ fn main() {
 		name: "Substrate Node",
 		commit: env!("VERGEN_SHA_SHORT"),
 		version: env!("CARGO_PKG_VERSION"),
-		executable_name: "node-template",
+		executable_name: "origin-substrate-runtime",
 		author: "Anonymous",
-		description: "Template Node",
+		description: "Origin Substrate",
 		support_url: "support.anonymous.an",
 	};
 
