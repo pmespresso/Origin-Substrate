@@ -14,6 +14,3 @@ SRMLs give flexibilty over Ethereum smart contracts in:
 * Easy onramp into Polkadot and its shared security model with Cumulus
 * Wont be unintentionally rate-limited by high transaction volume by some other dapp on the same chain (as with Ethereum)
 
-
-
-

@@ -3,7 +3,10 @@
 
 use codec::{Encode, Decode};
 use rstd::prelude::Vec;
-use sr_primitives::traits::{Zero};
+use sr_primitives::{
+  RuntimeDebug,
+  traits::{Zero}
+};
 use support::{decl_module, decl_storage, decl_event, dispatch::Result, ensure};
 use system::ensure_signed;
 
@@ -12,8 +15,7 @@ pub trait Trait: balances::Trait + system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
-#[derive(Encode, Decode, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Clone, Copy, Decode, Encode, PartialEq, RuntimeDebug)]
 pub enum OfferingStatus {
   Undefined,
   Created,
@@ -21,8 +23,7 @@ pub enum OfferingStatus {
   Disputed,
 }
 
-#[derive(Encode, Decode, Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Clone, Copy, Decode, Encode, PartialEq, RuntimeDebug)]
 pub enum Ruling {
   Seller,
   Buyer,
@@ -30,16 +31,14 @@ pub enum Ruling {
   ComAndBuyer,
 }
 
-#[derive(Clone, Copy, Decode, Encode, Default, PartialEq)]
-#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Clone, Copy, Decode, Encode, PartialEq, RuntimeDebug)]
 pub struct Listing<AccountId, Balance> {
   seller: AccountId,
   deposit: Balance,
   deposit_manager: AccountId
 }
 
-#[derive(Encode, Decode, Clone, PartialEq)]
-#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Encode, Decode, Clone, PartialEq, RuntimeDebug)]
 pub struct Offering<AccountId, Balance, BlockNumber> {
   value: Balance,         // Amount in Eth or ERC20 buyer is offering
   commission: Balance,    // Amount of commission earned if offer is finalized
