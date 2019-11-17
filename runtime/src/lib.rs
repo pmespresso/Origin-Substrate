@@ -233,6 +233,20 @@ impl marketplace::Trait for Runtime {
 	type Event = Event;
 }
 
+impl staking::Trait for Runtime {
+	type Currency = Balances;
+	type Time = Timestamp;
+	type CurrencyToVote = CurrencyToVoteHandler;
+	type RewardRemainder = Treasury;
+	type Event = Event;
+	type Slash = Treasury; // send the slashed funds to the treasury.
+	type Reward = (); // rewards are minted from the void
+	type SessionsPerEra = SessionsPerEra;
+	type BondingDuration = BondingDuration;
+	type SessionInterface = Self;
+	type RewardCurve = RewardCurve;
+}
+
 // impl template::Trait for Runtime {
 // 	type Event = Event;
 // }
@@ -250,6 +264,7 @@ construct_runtime!(
 		Indices: indices::{default, Config<T>},
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
+		Staking: staking::{default},
 		Sudo: sudo,
 		// TemplateModule: template::{Module, Call, Storage, Event<T>},
 		Marketplace: marketplace::{Module, Call, Storage, Event<T>},
