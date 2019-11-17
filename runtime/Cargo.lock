@@ -933,7 +933,6 @@ dependencies = [
  "sr-primitives 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
  "sr-std 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
  "sr-version 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
- "srml-assets 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
  "srml-aura 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
  "srml-balances 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
  "srml-executive 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
@@ -1158,17 +1157,6 @@ dependencies = [
  "serde 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)",
  "sr-primitives 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
  "sr-std 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
-]
-
-[[package]]
-name = "srml-assets"
-version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411#d2c4b0dbd89d9588adcbe97320e27f49ee251411"
-dependencies = [
- "parity-scale-codec 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "sr-primitives 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
- "srml-support 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
- "srml-system 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)",
 ]
 
 [[package]]
@@ -2054,7 +2042,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum sr-staking-primitives 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"
 "checksum sr-std 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"
 "checksum sr-version 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"
-"checksum srml-assets 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"
 "checksum srml-aura 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"
 "checksum srml-balances 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"
 "checksum srml-executive 2.0.0 (git+https://github.com/paritytech/substrate.git?rev=d2c4b0dbd89d9588adcbe97320e27f49ee251411)" = "<none>"

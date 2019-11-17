@@ -53,7 +53,7 @@ pub struct Offering<AccountId, Balance, BlockNumber> {
 
 // This module's storage items.
 decl_storage! {
-	trait Store for Module<T: Trait> as MarketplaceModule {
+	trait Store for Module<T: Trait> as Marketplace {
 		Listings get(listings): Vec<Listing<T::AccountId, T::Balance>>; // all listings vec
     ListingAtIndex get(listing_at_index): map u64 => Option<Listing<T::AccountId, T::Balance>>; // listing_id => Listing
     ListingsNonce get(listings_nonce): u64;
@@ -362,7 +362,7 @@ mod tests {
 		type Event = ();
 	}
 
-	type MarketplaceModule = Module<Test>;
+	type Marketplace = Module<Test>;
 
 	// This function basically just builds a genesis storage key/value store according to
 	// our desired mockup.
@@ -373,7 +373,7 @@ mod tests {
 	#[test]
 	fn create_listing() {
 		with_externalities(&mut new_test_ext(), || {
-			assert_ok!(MarketplaceModule::create_listing(Origin::signed(1), Zero::zero(), 1, Hash::default()));
+			assert_ok!(Marketplace::create_listing(Origin::signed(1), Zero::zero(), 1, Hash::default()));
 		});
 	}
 }

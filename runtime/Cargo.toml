@@ -27,12 +27,6 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'srml-support'
 rev = 'd2c4b0dbd89d9588adcbe97320e27f49ee251411'
 
-[dependencies.assets]
-default_features = false
-git = 'https://github.com/paritytech/substrate.git'
-package = 'srml-assets'
-rev = 'd2c4b0dbd89d9588adcbe97320e27f49ee251411'
-
 [dependencies.grandpa]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
