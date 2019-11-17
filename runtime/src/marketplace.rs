@@ -5,7 +5,11 @@ use codec::{Encode, Decode};
 use rstd::prelude::Vec;
 use sr_primitives::{
   RuntimeDebug,
-  traits::{Zero}
+  traits::{
+    CheckedAdd,
+    // CheckedSub,
+    Zero
+  }
 };
 use support::{decl_module, decl_storage, decl_event, dispatch::Result, ensure};
 use system::ensure_signed;
@@ -23,7 +27,7 @@ pub enum OfferingStatus {
   Disputed,
 }
 
-#[derive(Clone, Copy, Decode, Encode, PartialEq, RuntimeDebug)]
+#[derive(Clone, Copy, Decode, Encode, PartialEq, Eq, RuntimeDebug)]
 pub enum Ruling {
   Seller,
   Buyer,
@@ -38,9 +42,9 @@ pub struct Listing<AccountId, Balance> {
   deposit_manager: AccountId
 }
 
-#[derive(Encode, Decode, Clone, PartialEq, RuntimeDebug)]
+#[derive(Encode, Decode, Copy, Clone, PartialEq, RuntimeDebug)]
 pub struct Offering<AccountId, Balance, BlockNumber> {
-  value: Balance,         // Amount in Eth or ERC20 buyer is offering
+  value: Balance,         // Amount in Native token balance
   commission: Balance,    // Amount of commission earned if offer is finalized
   refund: Balance,        // Amount to refund buyer upon finalization
   buyer: AccountId,      // Buyer wallet / identity contract / other contract
@@ -69,7 +73,6 @@ decl_module! {
 	pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 		fn deposit_event() = default;
     
-    // FIXME: also transfer the actual balance to ... the listing itself?
 		pub fn create_listing(origin, _deposit: T::Balance, _deposit_manager: T::AccountId, _ipfs_hash: T::Hash) -> Result {
       let sender = ensure_signed(origin)?;
 
@@ -78,6 +81,9 @@ decl_module! {
         deposit: _deposit.clone(),
         deposit_manager: _deposit_manager.clone(), // key that controls how the deposit is distributed
       };
+
+      // TODO send the deposit from origin to treasury.
+      
 
       // push the new listing
       <Listings<T>>::mutate(|l| l.push(listing.clone()));
@@ -118,20 +124,30 @@ decl_module! {
 
           new_offer.refund = _refund;
 
-          <Offerings<T>>::mutate(&_listing_id, |offers| offers.push(new_offer));
+          <Offerings<T>>::mutate(&_listing_id, |offers| offers.push(new_offer.clone()));
 
           if _ruling == Ruling::Buyer {
               Self::refund_buyer(_listing_id, _offer_id);
           } else  {
               Self::pay_seller(_listing_id, _offer_id);
           }
-          // if (_ruling & 2 == 2) {
-              // payCommission(listingID, offerID);
-          // } else  { // Refund commission to seller
+
+          if _ruling == Ruling::ComAndSeller {
+            Self::pay_commission(new_offer.affiliate, new_offer.commission);
+          } else  { // Refund commission to seller
               // listings[listingID].deposit += offer.commission;
-          // }
-          // emit OfferRuling(offer.arbitrator, listingID, offerID, _ipfsHash, _ruling);
-          // delete offers[listingID][offerID];
+              <ListingAtIndex<T>>::mutate(&_listing_id, |_listing_optional| {
+                if let Some(listing) = _listing_optional {
+                  listing.deposit.checked_add(&offer.commission);
+                }
+              });
+          }
+
+          Self::deposit_event(
+            RawEvent::OfferRuling(offer.arbitrator.clone(), _listing_id, _offer_id, _ipfs_hash, _ruling)
+          );
+
+          <Offerings<T>>::remove(_offer_id);
         }
         // require(offer.status == 3, "status != disputed");
        
@@ -185,7 +201,7 @@ decl_module! {
         //  FIXME: tokenAddr.transferFrom(_seller, this, _additionalDeposit);
 
         <ListingAtIndex<T>>::mutate(_listing_id, |listing_optional| {
-          if let Some(listing) = listing_optional { listing.deposit += _additional_deposit; }
+          if let Some(listing) = listing_optional { listing.deposit.checked_add(&_additional_deposit); }
         });
       }
         
@@ -256,13 +272,15 @@ impl<T: Trait> Module<T> {
     Ok(())
   }
 
-  // @dev Pay seller in T::Currency
   fn pay_seller(_listing_id: u64, _offer_id: u64) -> Result {
-    // let listing_optional = Self::listings().get(_listing_id as usize);
+    // find the listing
+    let _listing = <ListingAtIndex<T>>::get(_listing_id).unwrap();
 
-    // Listing storage listing = listings[listingID];
-    // Offer storage offer = offers[listingID][offerID];
-    // uint value = offer.value - offer.refund;
+    // find the listing owner
+    let seller = _listing.seller;
+
+    let offer = &<Offerings<T>>::get(_listing_id)[_offer_id as usize];
+    let value = offer.value - offer.refund;
 
     // if (address(offer.currency) == 0x0) {
     //     require(offer.buyer.send(offer.refund), "ETH refund failed");
@@ -279,13 +297,25 @@ impl<T: Trait> Module<T> {
     // }
     Ok(())
   }
+
+  // @dev Pay commission to affiliate
+  fn pay_commission(_affiliate: T::AccountId, _commission: T::Balance) {
+    // FIXME: pay out
+    Self::deposit_event(
+      RawEvent::CommissionPayed(_affiliate, _commission)
+    );
+  }
 }
 
 decl_event!(
-	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId,
-  Hash = <T as system::Trait>::Hash {
+  pub enum Event<T>
+    where
+      AccountId = <T as system::Trait>::AccountId,
+      Balance = <T as balances::Trait>::Balance,
+      Hash = <T as system::Trait>::Hash {
     AffiliateAdded(AccountId, Hash), // _affilidate_id, ipfs hash
     AffiliateRemoved(AccountId, Hash), // _affilidate_id, ipfs hash
+    CommissionPayed(AccountId, Balance), // _affiliate_id, commission amount
     ListingCreated (AccountId, u64, Hash), // party, listing_id , ipfs hash
     ListingData(u64, u64, Hash), // listing_id, offer_id, ipfs hash
     ListingUpdated (AccountId, u64, Hash), // party, listing_id, ipfs hash
@@ -293,6 +323,8 @@ decl_event!(
     MarketplaceData(AccountId, Hash), // sender, ipfs hash
     OfferingCreated (AccountId, u64, u64, Hash), // party, listing_id, # of offerings, ipfs hash
     OfferingData(u64, u64, Hash), // listing_id, offer_id, ipfs hash
+    OfferRuling(AccountId, u64, u64, Hash, Ruling), // party, listing_id, offer_id, ipfs_hash, ruling
+
 	}
 );
 
