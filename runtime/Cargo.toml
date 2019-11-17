@@ -51,6 +51,18 @@ git = 'https://github.com/paritytech/substrate.git'
 package = 'substrate-consensus-aura-primitives'
 rev = 'd2c4b0dbd89d9588adcbe97320e27f49ee251411'
 
+[dependencies.staking]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'srml-staking'
+rev = 'd2c4b0dbd89d9588adcbe97320e27f49ee251411'
+
+[dependencies.sr-staking-primitives]
+default_features = false
+git = 'https://github.com/paritytech/substrate.git'
+package = 'sr-staking-primitives'
+rev = 'd2c4b0dbd89d9588adcbe97320e27f49ee251411'
+
 [dependencies.substrate-session]
 default_features = false
 git = 'https://github.com/paritytech/substrate.git'
@@ -162,6 +174,8 @@ std = [
 	"balances/std",
 	"aura/std",
 	"aura-primitives/std",
+	"sr-staking-primitives/std",
+	"staking/std",
 	"grandpa/std",
 	"executive/std",
 	"indices/std",
