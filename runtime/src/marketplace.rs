@@ -44,7 +44,7 @@ pub struct Listing<AccountId, Balance> {
 
 #[derive(Encode, Decode, Copy, Clone, PartialEq, RuntimeDebug)]
 pub struct Offering<AccountId, Balance, BlockNumber> {
-  value: Balance,         // Amount in Native token balance
+  value: Balance,         // Amount in Nat`ive token balance
   commission: Balance,    // Amount of commission earned if offer is finalized
   refund: Balance,        // Amount to refund buyer upon finalization
   buyer: AccountId,      // Buyer wallet / identity contract / other contract
