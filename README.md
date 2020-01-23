@@ -7,7 +7,7 @@ What do Airbnb, Uber, Ebay, and Tinder have in common? Well, yes they are 2 side
 
 1. Two Mutually Benefitting Entity Groups: i.e. Airbnb (Host & Guest), Uber (Rider & Driver), Ebay (Buyer & Seller), Tinder (Woman & Man)
 
-2. Network Effects: Buyers want a network with many sellers (competition to drive down prices), while Sellers want a network with many buyers (demand to drive up prices). The result is that users on either side prefer to conduct their business in a bustling marketplace than in a sparse one. Users will pay a highe price to access a larger network.
+2. Network Effects: Buyers want a network with many sellers (competition to drive down prices), while Sellers want a network with many buyers `(demand to drive up prices). The result is that users on either side prefer to conduct their business in a bustling marketplace than in a sparse one. Users will pay a highe price to access a larger network.
 
 3. Match Making: The Multi-Sided Platform is in the business of efficiently matching members of the supply side to those on the demand side, and extracting a service fee. The core service of any multi-sided platform is in the match-making.
 
